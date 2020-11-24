@@ -29,6 +29,10 @@ circularQueue::circularQueue(int maxCapacity){
 
 circularQueue::~circularQueue(){
     delete[] data;
+    head = -1;
+    tail = -1;
+    capacity = 0;
+    mSize = 0;
 }
 
 void circularQueue::enqueue(int value){
