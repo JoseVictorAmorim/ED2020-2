@@ -40,22 +40,18 @@ pilhaDupla::pilhaDupla() {
 }
 
 void pilhaDupla::empilha(int escolha, int valor) {
-    if(tamanho1+tamanho2 > 50){
+    if(tamanho1+tamanho2 >= 50){
         cout << "INVALIDO" << endl;
     }else{
         if(escolha == 1){
-            if(topo1<topo2){
-                topo1++;
-                dados[topo1] = valor;
-                tamanho1++;
-            }
+            topo1++;
+            dados[topo1] = valor;
+            tamanho1++;
         }
         else{
-            if(topo2>topo1){
-                topo2--;
-                dados[topo2] = valor;
-                tamanho2++;
-            }
+            topo2--;
+            dados[topo2] = valor;
+            tamanho2++;
         }
     }
 }
