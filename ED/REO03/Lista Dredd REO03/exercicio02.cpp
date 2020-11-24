@@ -2,7 +2,7 @@
  * compartilhado em um vetor com 50 posições
  *
  * by Joukim, 2019, Estruturas de Dados
- *
+ * Editado por: José Victor Amorim Morais
  */
 
 #include <iostream>
@@ -97,7 +97,7 @@ int main() {
         case 'D':
             cin >> escolha;
             if ( PP.vazia(escolha) ) cout << "VAZIA" << endl;
-            else cout << PP.desempilha(escolha) << " ";  
+            else cout << PP.desempilha(escolha) << " " << endl;
             break;      
         }
     } while (opcao != 'T');
