@@ -47,17 +47,20 @@ void circularQueue::enqueue(int value){
 }
 
 int circularQueue::dequeue(){
+    int aux = -1;
     if(mSize > 0){
-        int aux = data[head];
+        aux = data[head];
         mSize--;
         head++;
         head = head % capacity;    
-        return aux;
-    }else if(mSize == 0){
+    }
+
+    if(mSize == 0){
         head = -1;
         tail = -1;
     }
-    return -1;
+
+    return aux;
 }
 
 void circularQueue::info(){
@@ -67,7 +70,7 @@ void circularQueue::info(){
     << " fim=" << tail << endl;
 
     // saida na ordem do vetor
-    for(int i = 0; i < mSize; i++){
+    for(int i = 0; i < capacity; i++){
         cout << data[i] << " "; //Quebra de estrutura, porem pedido pelo exercício
     }
    
