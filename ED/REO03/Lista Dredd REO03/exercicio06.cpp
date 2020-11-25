@@ -3,19 +3,18 @@ using namespace std;
 
 class circularQueue{
     private:
-        int head;
-        int tail;
+        int head; //inicio da fila
+        int tail; //fim da fila
         int* data;
         unsigned capacity;
         unsigned mSize;
     public:
         circularQueue(int maxCapacity);
         ~circularQueue();
-        unsigned getSize();
         void enqueue(int value);
         int dequeue();
-        void clearQueue();
-        bool empty();
+       // void clearQueue();
+       // bool empty();
         void info();
 };
 
@@ -51,31 +50,14 @@ int circularQueue::dequeue(){
     if(mSize > 0){
         int aux = data[head];
         mSize--;
-        if(mSize > 0){
-            head++;
-            head = head % capacity;
-        }else{
-            head = -1;
-            tail = -1;
-        }
+        head++;
+        head = head % capacity;    
         return aux;
-    }else{
-        return -1;
+    }else if(mSize == 0){
+        head = -1;
+        tail = -1;
     }
-}
-
-unsigned circularQueue::getSize(){
-    return mSize;
-}
-
-void circularQueue::clearQueue(){
-    while(not this->empty()){
-        this->dequeue();
-    }
-}
-
-bool circularQueue::empty(){
-    return(mSize == 0);
+    return -1;
 }
 
 void circularQueue::info(){
@@ -84,9 +66,26 @@ void circularQueue::info(){
     << " inicio=" << head
     << " fim=" << tail << endl;
 
-    for(int i = 0; i < capacity; i++){
+    // saida na ordem do vetor
+    for(int i = 0; i < mSize; i++){
         cout << data[i] << " "; //Quebra de estrutura, porem pedido pelo exercício
     }
+   
+    // saida na ordem da fila 
+    /*if(mSize != 0){
+        if(tail>=head){
+        for(int i = head; i <= tail; i++){
+                cout << data[i] << " ";
+            }
+        }else{
+            for(int i = head; i < mSize; i++){
+                cout << data[i] << " ";
+            }
+            for(int i = 0; i <= tail; i++){
+                cout << data[i] << " ";
+            }
+        }
+    } */
     cout << endl;
 }
 
