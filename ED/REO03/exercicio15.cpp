@@ -1,5 +1,6 @@
 #include <iostream>
-
+#include <cstdlib>
+using namespace std;
 class Pessoa {
     public:
         int senha;
@@ -23,7 +24,7 @@ class MaxHeap {
         MaxHeap(int cap);
         ~MaxHeap();
         void Inserir(TDado d);
-        bool Retirar(TDado* ptDado);
+        bool Retirar(TDado& ptDado);
         bool Vazia();
     private:
         TDado* heap;
@@ -39,38 +40,83 @@ class MaxHeap {
 using namespace std;
 
 MaxHeap::MaxHeap(int cap) {
+    capacidade = cap;
+    heap = new TDado[cap];
+    tamanho = 0;
 }
 
 MaxHeap::~MaxHeap() {
+    delete[] heap;
 }
 
 void MaxHeap::ArrumarDescendo(int i) {
     // Arruma descendo a partir da posicao i.
+    int esq = Esquerdo(i);
+    int dir = Direito(i);
+    int pai = Pai(i);
+    int maior = i;
+
+    if((esq < tamanho) and (heap[esq] > heap[maior])){
+        maior = esq;
+    }
+
+    if((dir < tamanho) and (heap[dir] > heap[maior])){
+        maior = dir;
+    }
+
+    if(maior != i){
+        swap(heap[i], heap[maior]);
+        ArrumarDescendo(maior);
+    }
 }
 
 void MaxHeap::ArrumarSubindo(int i) {
     // Arruma subindo a partir da posicao i.
+    int p = Pai(i);
+    if(heap[i]> heap[p]){
+        swap(heap[i], heap[p]);
+        ArrumarSubindo(p);
+    }
 }
 
 int MaxHeap::Pai(int i) {
+    return((i-1)/2);
 }
 
 int MaxHeap::Esquerdo(int i) {
+    return((2*i)+1);
 }
 
 int MaxHeap::Direito(int i) {
+    return((2*i)+2);
 }
 
-bool MaxHeap::Retirar(TDado* ptDado) {
+bool MaxHeap::Retirar(TDado& ptDado) {
     // Retira e retorna o maior valor.
     // Retorna falso se a heap estiver vazia.
+    if(Vazia()){
+        return false;
+    }
+    ArrumarDescendo(0);
+    ptDado = heap[0];
+    swap(heap[0], heap[tamanho-1]);
+    tamanho--;
+    ArrumarDescendo(0);
+  
+    return true;
 }
 
 bool MaxHeap::Vazia() {
+    return(tamanho == 0);
 }
 
 void MaxHeap::Inserir(TDado d){
     // Insere um dado na heap.
+    if(tamanho < capacidade){
+        heap[tamanho] = d;
+        ArrumarSubindo(tamanho);
+        tamanho++;
+    }
 }
 
 std::ostream& operator << (std::ostream& saida, const MaxHeap& h) {
@@ -127,7 +173,7 @@ int main() {
                 cout << pessoa.senha << ' ' << pessoa.prioridade << endl;
                 break;
             case 'a': // atendimento
-                if (heap.Retirar(&pessoa))
+                if (heap.Retirar(pessoa))
                     cout << pessoa.senha << endl;
                 else
                     cout << "ninguem na fila" << endl;
