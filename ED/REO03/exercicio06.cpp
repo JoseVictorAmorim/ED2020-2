@@ -28,10 +28,6 @@ circularQueue::circularQueue(int maxCapacity){
 
 circularQueue::~circularQueue(){
     delete[] data;
-    head = -1;
-    tail = -1;
-    capacity = 0;
-    mSize = 0;
 }
 
 void circularQueue::enqueue(int value){
@@ -69,11 +65,15 @@ void circularQueue::info(){
     << " inicio=" << head
     << " fim=" << tail << endl;
 
-    // Como explicado na live do dia 25/11, saida na ordem do vetor. 
-    for(int i = 0; i < capacity; i++){
-        cout << data[i] << " "; //Quebra de estrutura, porem pedido pelo exercício
+    // Como explicado na live do dia 25/11, saida na ordem do vetor.
+    if(mSize == 1){ //Se o vetor só tiver um dado, mostra apenas o dado e a posição dele no vetor.
+        cout << data[head];
+    }else{ 
+        for(int i = 0; i < capacity; i++){
+            cout << data[i] << " "; //Quebra de estrutura, porem pedido pelo exercício
+        }
     }
-   
+
     // saida na ordem da fila 
     /*if(mSize != 0){
         if(tail>=head){
