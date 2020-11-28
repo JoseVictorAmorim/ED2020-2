@@ -32,7 +32,7 @@ class MaxHeap {
         int tamanho;
         void ArrumarDescendo(int i);
         void ArrumarSubindo(int i);
-        inline int Direito(int i);
+        inline int Direito(int i); 
         inline int Esquerdo(int i);
         inline int Pai(int i);
 };
@@ -53,7 +53,6 @@ void MaxHeap::ArrumarDescendo(int i) {
     // Arruma descendo a partir da posicao i.
     int esq = Esquerdo(i);
     int dir = Direito(i);
-    int pai = Pai(i);
     int maior = i;
 
     if((esq < tamanho) and (heap[esq] > heap[maior])){
