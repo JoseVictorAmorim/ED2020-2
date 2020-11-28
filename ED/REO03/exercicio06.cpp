@@ -103,3 +103,19 @@ int main(){
 
     return 0;
 }
+
+// saida na ordem da fila 
+    /*if(mSize != 0){
+        if(tail>=head){
+        for(int i = head; i <= tail; i++){
+                cout << data[i] << " ";
+            }
+        }else{
+            for(int i = head; i < mSize; i++){
+                cout << data[i] << " ";
+            }
+            for(int i = 0; i <= tail; i++){
+                cout << data[i] << " ";
+            }
+        }
+    } */
