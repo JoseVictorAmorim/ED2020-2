@@ -69,7 +69,7 @@ void circularQueue::info(){
     if(mSize == 1){ //Se o vetor só tiver um dado, mostra apenas o dado e a posição dele no vetor.
         cout << data[head];
     }else{ 
-        for(int i = 0; i < capacity; i++){
+        for(unsigned i = 0; i < capacity; i++){
             cout << data[i] << " "; //Quebra de estrutura, porem pedido pelo exercício
         }
     }
