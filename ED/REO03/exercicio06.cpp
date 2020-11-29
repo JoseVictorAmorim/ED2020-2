@@ -9,13 +9,13 @@ class circularQueue{
         unsigned capacity;
         unsigned mSize;
     public:
-        circularQueue(int maxCapacity);
-        ~circularQueue();
+        circularQueue(int maxCapacity); //Construtor
+        ~circularQueue(); //Destrutor
+
         void enqueue(int value);
         int dequeue();
-       // void clearQueue();
-       // bool empty();
-        void info();
+        bool empty();
+        void info(); //método para obter as informações da fila. Faz quebra de estrutura.
 };
 
 circularQueue::circularQueue(int maxCapacity){
@@ -35,7 +35,7 @@ void circularQueue::enqueue(int value){
         tail++;
         tail = tail % capacity;
         data[tail] = value;
-        if(mSize == 0){
+        if(empty()){
             head++;
         }
         mSize++;
@@ -44,19 +44,23 @@ void circularQueue::enqueue(int value){
 
 int circularQueue::dequeue(){
     int aux = -1;
-    if(mSize > 0){
+    if(not empty()){
         aux = data[head];
         mSize--;
         head++;
         head = head % capacity;    
     }
-
-    if(mSize == 0){
+    
+    if(empty()){ //sem else para forçar a verificação após a mudança no primeiro if
         head = -1;
         tail = -1;
     }
 
     return aux;
+}
+
+bool circularQueue::empty(){
+    return(mSize == 0);
 }
 
 void circularQueue::info(){
