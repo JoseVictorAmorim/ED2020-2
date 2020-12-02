@@ -4,19 +4,23 @@ using namespace std;
 
 int moda(float *vec, int tamanho){
     int cont[tamanho];
-    int moda = 0, conta = 0;
     for(int i = 0; i < tamanho; i++){
+        cont[i] = 0;
+    }
+    int moda = 0;
+    for(int i = 0; i < tamanho-1; i++){
          for(int j=i+1;j<tamanho;j++){  
             if(vec[i]==vec[j]){
                 cont[i]++;
-                if(cont[i]>conta){
-                    conta=cont[i];
-                    moda=i;
-                    }
-                } 
             }
-        cont[i]=0;
+        }
     }
+    for(int i = 0; i < tamanho; i++){
+        if(cont[i] > moda){
+            moda = i;
+        }   
+    }
+    
     return vec[moda];
 };
 
