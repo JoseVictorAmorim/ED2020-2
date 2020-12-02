@@ -49,7 +49,8 @@ void quartis(float *vet, int tamanho){
     q2 = mediana(vet, tamanho);
     float* vecAux = new float[tamanho/2];
     int j = 0;
-    for(int i = tamanho+1/2; i < tamanho; i++){
+
+    for(int i = (tamanho/2)+1; i < tamanho; i++){
         vecAux[j] = vet[i];
         j++;
     }
