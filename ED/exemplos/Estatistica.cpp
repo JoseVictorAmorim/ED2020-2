@@ -2,7 +2,7 @@
 #include <cmath>
 using namespace std;
 
-int moda(float *vec, int tamanho){
+float moda(float *vec, int tamanho){
     int cont[tamanho];
     for(int i = 0; i < tamanho; i++){
         cont[i] = 0;
