@@ -3,205 +3,169 @@
 using namespace std;
 
 int hashFunction(int k){
-    return k % 11;
+    return k % 101;
 }
 
-class noh{
-    friend class hashTable;
-    private:
-        int key;
-        int data;
-        noh *nextNoh;
-
-    public:
-        noh(int value, int k);
+struct data{
+    int key;
+    int value;
 };
-
-noh::noh(int value, int k){
-    data = value;
-    key = k;
-    nextNoh = NULL;
-}
-
 class hashTable{
     private:
-        //int mSize;
+        int mSize;
         int capacity;
-        noh **table;
-        void removeAll();
+        data* table;
     public:
         // construtores e destrutores
-        hashTable(int cap = 11);
+        hashTable(int cap = 101);
         ~hashTable();
 
-        //inserção de value com chave k;
-        void insert(int value, int k);
+        int search(int k); 
 
-        //recuperação
-        int recover(int k);
+        void insert(int k); //Adiciona(S,x)
 
-        //alteração
-        void changeValue(int value, int k);
+        void remove(int k); //Remove(S,x)
 
-        //remoção de valor vinculado a chave
-        void removeValue(int k);
+        bool member(int k); //membro(S,x)
 
-        //print para debug
-        void print();
+        int getSize(); //tamanho(S)
+
+        void print(); //imprime(S)
 };
 
 hashTable::hashTable(int cap){
     capacity = cap;
-    table = new noh*[capacity];
+    table = new data[capacity];
     for(int i = 0; i < capacity; i++){
-        table[i] = NULL;
+        table[i].key = -1;
+        table[i].value = -1;
     }
+    mSize = 0;
 }
 
 hashTable::~hashTable(){
-    removeAll();
-}
-
-void hashTable::removeAll(){
-    for(int i = 0; i < capacity; i++){
-        noh* temp = table[i];
-        while(temp != NULL){
-            noh* aux = temp;
-            temp = temp->nextNoh;
-            delete aux;
-        }
-    }
     delete[] table;
 }
 
-void hashTable::insert(int value, int k){
+int hashTable::search(int k){
     int position = hashFunction(k);
-    noh* current = new noh(value, k);
-
-    if(table[position] == NULL){
-        current->nextNoh = NULL;
-        table[position] = current;
-    }else{
-        noh* current = table[position];
-        if(current->nextNoh == NULL){
-            noh* newNoh = new noh(value, k);
-            current->nextNoh = newNoh;
-        }else{
-            while(current->nextNoh != NULL){
-                current = current->nextNoh;
-            }
-            noh* newNoh = new noh(value, k);
-            current->nextNoh = newNoh;
+    int finalPosition = position;
+    data d;
+    do{
+        d = table[position];
+        if(d.value == -1){
+            return -1;;
         }
+        if(d.key == k){
+            return position;
+        }
+        position = (position+1)%capacity;
+    }while(position != finalPosition);
+
+    return -1;; //percorreu todo vetor e não encontrou
+}
+
+//adiciona(S,x)
+void hashTable::insert(int k){
+    if(mSize == capacity){
+        return;
+    }
+
+    if(search(k) != -1){
+        return;
+    }
+
+    int position = hashFunction(k);
+
+    while(table[position].value != -1){
+        position = (position+1)%capacity;
+    }
+    table[position].key = k;
+    table[position].value = 1;
+    mSize++;
+}
+
+//remove(S,x)
+void hashTable::remove(int k){
+    if(mSize == 0){
+        return;
+    }
+
+    int position = search(k);
+    if(position == -1){
+        return;
+    }
+    table[position].value = -1;
+    table[position].key = -1;
+    mSize--;
+}
+
+//membro(S,x)
+bool hashTable::member(int k){
+    int y = search(k);
+    if(y == -1){
+        return false;
+    }else{
+        return  true;
     }
 }
 
-int hashTable::recover(int k){
-    int position = hashFunction(k);
-
-    if((table[position] != NULL) and (table[position]->key == k)){
-        return table[position]->data;
-    }else{
-        noh* current = table[position];
-
-        while((current != NULL) and (current->key != k)){
-            current = current->nextNoh;
-        }
-
-        if((current != NULL) and (current->key == k)){
-            return current->data;
-        }else{
-            return -1;
-        }
-
-    }
+//tamanho(S)
+int hashTable::getSize(){
+    return mSize;
 }
 
-void hashTable::changeValue(int value, int k){
-    int position = hashFunction(k);
-
-    if(table[position] == NULL){
-        cerr << "ERRO NA ALTERAÇÃO" << endl;
-    }else{
-        noh* current = table[position];
-
-        if((current->nextNoh == NULL) and (current->key != k)){
-            cerr << "ERRO NA ALTERAÇÃO" << endl;
-        }else if((current->nextNoh == NULL) and (current->key == k)){
-            current->data = value;
-        }else if(current->nextNoh != NULL){
-            bool aux = false;
-
-            while((current->nextNoh != NULL) and (not aux)){
-                if(current->key == k){
-                    current->data = value;
-                    aux = true;
-                }
-                current = current->nextNoh;
-            }
-
-            if(not aux){
-                cerr << "ERRO NA ALTERAÇÃO" << endl;
-            }
-        }
-    }
-}
-
-void hashTable::removeValue(int k){
-    int position = hashFunction(k);
-
-    if((table[position] != NULL) and (table[position]->key != k)){
-        noh* aux = table[position];
-        table[position] = table[position]->nextNoh;
-        delete aux;
-    }else{
-        noh* previous = NULL;
-        noh* current = table[position];
-
-        while((current != NULL) and (current->key != k)){
-            previous = current;
-            current = current->nextNoh;
-        }
-
-        if((current != NULL) and (current->key == k)){
-            previous->nextNoh = current->nextNoh;
-            delete current;
-        }else{
-            cerr << "Erro na remoção" << endl;
-        }
-    }
-}
-
+//imprime(S)
 void hashTable::print(){
-    noh* current;
-    for (int i = 0; i < capacity; i++) {
-        cout << i << ":";
-        current = table[i];
-        while (current != NULL) {
-            cout << "[" << current->key << "/"
-                 << current->data << "]->";
-            current = current->nextNoh;
+    if(mSize == 0){
+        cout << "{}";
+    }else{
+        for(int i = 0; i < capacity; i++){
+            if(table[i].value != -1){
+                cout << table[i].key << " ";
+            }
         }
-        cout << "NULL  ";
     }
+    cout << endl;
 }
 
-int main( ) {
-    hashTable th;
-    int quantity;
-    int mKey;
-    int mValue;
+int main(){
+    hashTable myTable;
 
-    // insercao na tabela
-    cin >> quantity;
-    for (int i=0; i < quantity; i++) {
-        cin >> mValue;
-        mKey = hashFunction(mValue);
-        th.insert(mValue, mKey);
+    int myKey;;
+
+    for(int i = 0; i < 10; i++){
+        cin >> myKey;
+        myTable.insert(myKey);
+    }
+    
+    for(int i = 0; i < 3; i++){
+        cin >> myKey;
+        myTable.remove(myKey);
+    }
+    
+
+    int seek;
+    for(int i = 0; i < 2; i++){
+        cin >> seek;
+        bool x = myTable.member(seek);
+        if(x){
+            cout << 1 << endl;
+        }else{
+            cout << -1 << endl;
+        }
     }
 
-    th.print();
+
+    
+    myTable.print();
+
+    for(int i = 0; i < 3; i++){
+        cin >> myKey;
+        myTable.insert(myKey);
+    }
+   
+    myTable.print();
 
     return 0;
 }
-
