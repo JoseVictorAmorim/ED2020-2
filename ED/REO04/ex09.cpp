@@ -132,7 +132,7 @@ void hashTable::print(){
 int main(){
     hashTable myTable;
 
-    int myKey;;
+    int myKey;
 
     for(int i = 0; i < 10; i++){
         cin >> myKey;
