@@ -174,6 +174,5 @@ int main(){
 
     myTable.print(); //7.Imprime novamente o conteúdo do conjunto, na ordem em que estão armazenados.
 
-
     return 0;
 }
