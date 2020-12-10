@@ -66,6 +66,8 @@ int hashTable::search(int k){
 }
 
 //adiciona(S,x)
+//Adiciona o elemento x no conjunto S, descartando duplicatas. 
+//Se x já fizer parte de S, não é gerado erro, apenas não se modifica o conteúdo de S.
 void hashTable::insert(int k){
     if(mSize == capacity){
         return;
@@ -86,6 +88,8 @@ void hashTable::insert(int k){
 }
 
 //remove(S,x)
+//Remove o elemento x do conjunto S. 
+//Se x não fizer parte de S, não é gerado erro, apenas não se modifica o conteúdo de S.
 void hashTable::remove(int k){
     if(mSize == 0){
         return;
@@ -101,6 +105,7 @@ void hashTable::remove(int k){
 }
 
 //membro(S,x)
+//Retorna true se o item x for membro do conjunto S.
 bool hashTable::member(int k){
     int y = search(k);
     if(y == -1){
@@ -111,11 +116,14 @@ bool hashTable::member(int k){
 }
 
 //tamanho(S)
+//Retorna o número de elementos de S.
 int hashTable::getSize(){
     return mSize;
 }
 
 //imprime(S)
+//Imprime os elementos de S. 
+//Caso o conjunto seja vazio, imprime {}
 void hashTable::print(){
     if(mSize == 0){
         cout << "{}";
@@ -136,36 +144,36 @@ int main(){
 
     for(int i = 0; i < 10; i++){
         cin >> myKey;
-        myTable.insert(myKey);
+        myTable.insert(myKey); //1.Constrói o conjunto a partir de uma lista de 10 elementos
+        //digitada pelo usuário.
     }
     
     for(int i = 0; i < 3; i++){
         cin >> myKey;
-        myTable.remove(myKey);
+        myTable.remove(myKey); //2.Remove três elementos indicados pelo usuário
     }
     
-
     int seek;
     for(int i = 0; i < 2; i++){
         cin >> seek;
-        bool x = myTable.member(seek);
-        if(x){
-            cout << 1 << endl;
+        bool x = myTable.member(seek); //3.Verifica se um dado valor informado pelo usuário é membro do conjunto.
+
+        if(x){ //imprima 1 para pertinência e -1 para não-pertinência.
+            cout << 1 << endl; 
         }else{
             cout << -1 << endl;
         }
-    }
+    } //4.Repete a operação de verificação de pertinência para outro valor informado pelo usuário.
 
+    myTable.print(); //5.Imprime o conteúdo do conjunto, na ordem em que estão armazenados.
 
-    
-    myTable.print();
-
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 3; i++){ //6.Adiciona três novos elementos indicados pelo usuário
         cin >> myKey;
         myTable.insert(myKey);
     }
-   
-    myTable.print();
+
+    myTable.print(); //7.Imprime novamente o conteúdo do conjunto, na ordem em que estão armazenados.
+
 
     return 0;
 }
