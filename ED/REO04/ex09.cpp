@@ -26,11 +26,11 @@ class hashTable{
 
         void remove(int k); //Remove(S,x)
 
-        bool member(int k); //membro(S,x)
+        bool member(int k); //Membro(S,x)
 
-        int getSize(); //tamanho(S)
+        int getSize(); //Tamanho(S)
 
-        void print(); //imprime(S)
+        void print(); //Imprime(S)
 };
 
 hashTable::hashTable(int cap){
@@ -54,7 +54,7 @@ int hashTable::search(int k){
     do{
         d = table[position];
         if(d.value == -1){
-            return -1;;
+            return -1;
         }
         if(d.key == k){
             return position;
@@ -62,7 +62,7 @@ int hashTable::search(int k){
         position = (position+1)%capacity;
     }while(position != finalPosition);
 
-    return -1;; //percorreu todo vetor e não encontrou
+    return -1; //percorreu todo vetor e não encontrou
 }
 
 //adiciona(S,x)
