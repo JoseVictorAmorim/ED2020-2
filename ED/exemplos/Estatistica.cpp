@@ -29,6 +29,7 @@ float media(float *vet, int tamanho){
     for(int i = 0; i < tamanho; i++){
         soma += vet[i];
     }
+    cout << "SOMA:: " << soma << endl;
     return(soma/tamanho);
 }
 
@@ -88,7 +89,8 @@ void medidasDispersao(float *vet, int tamanho){
     
 }
 void selection_sort(float *vet, int tamanho){
-	int menor, auxiliar;
+	int menor;
+    float auxiliar;
 	for(int i = 0; i < tamanho-1; i++){
 		menor = i;
 		for(int j = i+1; j < tamanho; j++){
