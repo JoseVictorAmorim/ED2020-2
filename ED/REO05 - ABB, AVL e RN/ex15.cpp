@@ -161,6 +161,9 @@ noh* avl::insereAux(noh* umNoh, const dado& umDado) {
 // checa e arruma, se necessário, o balanceamento em umNoh,
 // fazendo as rotações e ajustes necessários
 noh* avl::arrumaBalanceamento(noh* umNoh) {
+    if(umNoh == NULL){
+        return umNoh;
+    }
     atualizaAltura(umNoh);  
     int FB = umNoh->fatorBalanceamento();
     if((FB >= -1) and (FB <= 1)){
@@ -180,7 +183,7 @@ noh* avl::arrumaBalanceamento(noh* umNoh) {
         return rotacaoEsquerda(umNoh);
     }
     //caso4
-    if((FB<-1) and (umNoh->dir->fatorBalanceamento() > 0)){
+    else if((FB<-1) and (umNoh->dir->fatorBalanceamento() > 0)){
         umNoh->dir = rotacaoDireita(umNoh->dir);
         return rotacaoEsquerda(umNoh);
     }
@@ -201,7 +204,6 @@ noh* avl::rotacaoEsquerda(noh* umNoh) {
 
     return aux;
 }
-
 
 // rotação à direita na subárvore com raiz em umNoh
 // retorna o novo pai da subárvore
@@ -246,7 +248,7 @@ noh* avl::encontraMenor(noh* raizSub) {
     if (raizSub->esq != NULL){
         raizSub->esq = encontraMenor(raizSub->esq);
     }
-    return raizSub->esq;
+    return raizSub;
 }
 
 // procedimento auxiliar para remover o sucessor substituíndo-o pelo
@@ -267,8 +269,9 @@ void avl::remove(tipoChave chave) {
 
 noh* avl::removeAux(noh* umNoh, tipoChave chave) {
     if(umNoh == NULL){
-        cout << "BONITINHO" << endl;
+        throw runtime_error("Elemento não encontrado");
     }
+
     noh* novaRaiz = umNoh;
 
     if(chave < umNoh->elemento.chave){
@@ -281,10 +284,11 @@ noh* avl::removeAux(noh* umNoh, tipoChave chave) {
         }else if(umNoh->dir == NULL){
             novaRaiz = umNoh->esq;
         }else{
-            novaRaiz->dir = encontraMenor(umNoh->dir);
+            novaRaiz = encontraMenor(umNoh->dir);
+            novaRaiz->dir = removeMenor(umNoh->dir);
             novaRaiz->esq = umNoh->esq;
-            delete umNoh;
         }
+        delete umNoh;
     }
     return arrumaBalanceamento(novaRaiz);
 }
@@ -352,6 +356,21 @@ void avl::imprimir()
         imprimirDir( " " , this->raiz->dir );
     } else
         std::cout << "*arvore vazia*" << std::endl;
+}
+
+int avl::levantamentoAux(noh* umNoh, string marca, short ano){
+    while(umNoh != NULL){
+        if((umNoh->elemento.marca == marca) and (umNoh->elemento.anoFabricacao >= ano)){
+            return levantamentoAux(umNoh->esq, marca, ano) + levantamentoAux(umNoh->dir, marca, ano) + 1;
+        }else{
+            return levantamentoAux(umNoh->dir, marca, ano) + levantamentoAux(umNoh->esq, marca, ano);
+        }
+    }
+    return 0;    
+}
+
+int avl::levantamento(string marca, short ano){
+    return levantamentoAux(raiz, marca, ano);
 }
 
 int main() {
