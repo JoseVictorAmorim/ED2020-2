@@ -164,22 +164,25 @@ noh* avl::arrumaBalanceamento(noh* umNoh) {
     if(umNoh == NULL){
         return umNoh;
     }
+
     atualizaAltura(umNoh);  
+
     int FB = umNoh->fatorBalanceamento();
+
     if((FB >= -1) and (FB <= 1)){
         return umNoh;
     }
     //caso1
-    if((FB>1) and (umNoh->esq->fatorBalanceamento() >= 0)){
+    else if((FB>1) and (umNoh->esq->fatorBalanceamento() >= 0)){
         return rotacaoDireita(umNoh);
     }
     //caso2
-    if((FB>1) and (umNoh->esq->fatorBalanceamento() < 0)){
+    else if((FB>1) and (umNoh->esq->fatorBalanceamento() < 0)){
         umNoh->esq = rotacaoEsquerda(umNoh->esq);
         return rotacaoDireita(umNoh);
     }
     //caso3
-    if((FB<-1) and (umNoh->dir->fatorBalanceamento() <= 0)){
+    else if((FB<-1) and (umNoh->dir->fatorBalanceamento() <= 0)){
         return rotacaoEsquerda(umNoh);
     }
     //caso4
@@ -246,7 +249,7 @@ dado avl::busca(tipoChave chave) {
 // nó mínimo (sucessor) de subárvore com raiz em raizSub (folha mais à esquerda)
 noh* avl::encontraMenor(noh* raizSub) {
     if (raizSub->esq != NULL){
-        raizSub->esq = encontraMenor(raizSub->esq);
+        raizSub = encontraMenor(raizSub->esq);
     }
     return raizSub;
 }
@@ -269,7 +272,7 @@ void avl::remove(tipoChave chave) {
 
 noh* avl::removeAux(noh* umNoh, tipoChave chave) {
     if(umNoh == NULL){
-        throw runtime_error("Elemento não encontrado");
+        return NULL;
     }
 
     noh* novaRaiz = umNoh;
