@@ -61,7 +61,7 @@ class ABB {
         void transplanta(Noh* antigo, Noh* novo);
         Noh* minimoAux(Noh* atual);
 
-
+        int contador;
         //unsigned NroDeFolhasAux(Noh* atual);
         void destrutorRecursivo(Noh* atual);
         Noh* raiz;
@@ -73,6 +73,7 @@ ABB::~ABB(){
 
 ABB::ABB(){
     raiz = NULL;
+    contador = 0;
 }
 
 void ABB::destrutorRecursivo(Noh* atual){
@@ -85,8 +86,10 @@ void ABB::destrutorRecursivo(Noh* atual){
 
 void ABB::Inserir(Dado d) {
     Noh* novoNoh = new Noh(d);
+    contador = 0;
     if(raiz == NULL){
         raiz = novoNoh;
+        contador++;
     }else{
         Noh* atual = raiz;
         Noh* anterior = NULL;
@@ -98,9 +101,11 @@ void ABB::Inserir(Dado d) {
             }else{
                 atual = atual->dir;
             }
+            contador++;
         }
 
         novoNoh->pai = anterior;
+
 
         if(anterior->valor > novoNoh->valor){
             anterior->esq = novoNoh;
@@ -108,6 +113,9 @@ void ABB::Inserir(Dado d) {
             anterior->dir = novoNoh;
         }
     }
+    //cout << "Insercao de " << d << " " << "-----------";
+    cout << "Nos Acessados: " << contador << endl;
+    cout << endl << "-----------------" << endl << endl;
 }
 
 /*void ABB::percorre(Noh* atual){
@@ -164,15 +172,23 @@ void ABB::EscreverNivelANivel(ostream& saida) {
 }
 
 Dado ABB::busca(Dado valor){
+    contador = 0;
     Noh* resultado = buscaAux(valor);
-    if (resultado != NULL)
+    if (resultado != NULL){
+        cout << endl;
+        cout << "Nos Acessados: " << contador << endl;
+        cout << endl << "-----------------" << endl << endl;
+
         return resultado->valor;
-    else{
+    }else{
         cerr << "Elemento não encontrado davi, como q faz?" << endl;
+        cout << endl;
+        cout << "Nos Acessados: " << contador << endl;
+        cout << endl << "-----------------" << endl << endl;
+
         return 0;
     }
 }
-
 
 Noh* ABB::buscaAux(Dado chave){
     //Faz a busca na estrutura e retorna
@@ -180,11 +196,14 @@ Noh* ABB::buscaAux(Dado chave){
 
     while(atual != NULL){
         if(atual -> valor == chave){
+            contador++;
             return atual;
         } else if(atual -> valor > chave){
             atual = atual->esq;
+            contador++;
         } else {
             atual = atual->dir;
+            contador++;
         }
     }
     return atual;
@@ -193,6 +212,7 @@ Noh* ABB::buscaAux(Dado chave){
 void ABB::remove(Dado d){
     //Remove um elemento (noh) da arvore
     //Noh* aux = new Noh(d);
+    contador = 0;
     Noh* remover = buscaAux(d);
     
     if(remover == NULL){
@@ -200,10 +220,13 @@ void ABB::remove(Dado d){
     } else {
         if(remover -> esq == NULL){
             transplanta(remover, remover -> dir);
+            contador++;
         } else if(remover -> dir == NULL){
             transplanta(remover, remover -> esq);
+            contador++;
         } else {
             Noh* sucessor = minimoAux(remover -> dir);
+        
             if(sucessor -> pai != remover){
                 transplanta(sucessor, sucessor -> dir);
                 sucessor -> dir = remover -> dir;
@@ -212,9 +235,12 @@ void ABB::remove(Dado d){
             transplanta(remover, sucessor);
             sucessor -> esq = remover -> esq;
             sucessor -> esq -> pai = sucessor;
+            contador++;
         }
         delete remover;
     }
+    cout << "Nos Acessados: " << contador << endl;
+    cout << endl << "-----------------" << endl << endl;
 }
 
 void ABB::transplanta(Noh* antigo, Noh* novo){
@@ -229,12 +255,14 @@ void ABB::transplanta(Noh* antigo, Noh* novo){
     if(novo != NULL){
         novo->pai = antigo->pai;
     }
+    //contador++;
 } 
 
 Noh* ABB::minimoAux(Noh* atual){
     //Retorna o minimo da arvore
     while(atual -> esq != NULL){
         atual = atual -> esq;
+        //contador++;
     }
     return atual;
 }
@@ -258,18 +286,24 @@ int main() {
 
     //insere 30 objetos
     for (unsigned i = 0; i < 30; ++i) {
+        cout << "Insercao de: "; 
         cin >> valor;
         arvore.Inserir(valor);
     }
-
+    
+    cout << endl << "##################################################################" << endl << endl;
     //remove 20 objetos
     for (unsigned i = 0; i < 20; ++i) {
+        cout << "Remocao de: "; 
         cin >> valor;
         arvore.remove(valor);
     }
 
+    cout << endl << "##################################################################" << endl << endl;
+
     //busca 30 objetos
     for (unsigned i = 0; i < 30; ++i) {
+        cout << "Busca de: ";
         cin >> valor;
         arvore.busca(valor);
     }

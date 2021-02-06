@@ -60,6 +60,7 @@ int noh::fatorBalanceamento() {
 class avl {
     private:
         noh* raiz;
+        int contador;
         // funções auxiliares para remoção
         noh* encontraMenor(noh* raizSub);
         noh* removeMenor(noh* raizSub);
@@ -107,19 +108,28 @@ void avl::destruirRecursivamente(noh* umNoh) {
 
 
 void avl::insere(const dado& umDado) {
+    contador = 0;
     raiz = insereAux(raiz, umDado);
+    if(raiz->elemento == umDado){
+        contador++;
+    }
+    cout << "Nos Acessados: " << contador << endl;
+    cout << endl << "-----------------" << endl << endl;
 }
 
 // inserção recursiva, devolve nó para atribuição de pai ou raiz
 noh* avl::insereAux(noh* umNoh, const dado& umDado) {
+   
     noh* novoNoh;
     if(umNoh == NULL){
         novoNoh = new noh(umDado);
         return novoNoh;
     }else{
         if(umDado < umNoh->elemento){
+            contador++;
             umNoh->esq = insereAux(umNoh->esq, umDado);
         }else{
+            contador++;
             umNoh->dir = insereAux(umNoh->dir, umDado);
         }
     }
@@ -134,6 +144,7 @@ noh* avl::arrumaBalanceamento(noh* umNoh) {
     }
 
     atualizaAltura(umNoh);  
+    contador ++;
 
     int FB = umNoh->fatorBalanceamento();
 
@@ -169,9 +180,9 @@ noh* avl::rotacaoEsquerda(noh* umNoh) {
     noh* aux = umNoh->dir;
     umNoh->dir = aux->esq;
     aux->esq = umNoh;
-
     atualizaAltura(umNoh);
     atualizaAltura(aux);
+    contador ++;
 
     return aux;
 }
@@ -182,9 +193,11 @@ noh* avl::rotacaoDireita(noh* umNoh) {
     noh* aux = umNoh->esq;
     umNoh->esq = aux->dir;
     aux->dir = umNoh;
-
+   
     atualizaAltura(umNoh);
     atualizaAltura(aux);
+    contador ++;
+
 
     return aux;
 }
@@ -195,11 +208,14 @@ noh* avl::buscaAux(dado chave) {
 
     while(atual != NULL){
         if(atual->elemento == chave){
+            contador++;
             return atual;
         }else if(atual->elemento > chave){
             atual = atual->esq;
+            contador++;
         }else{
             atual = atual->dir;
+            contador++;
         }
     }
     return atual;
@@ -207,7 +223,10 @@ noh* avl::buscaAux(dado chave) {
 
 // busca elemento com uma dada chave na árvore e retorna o registro completo
 dado avl::busca(dado chave) {
+    contador = 0;
     noh* resultado = buscaAux(chave);
+    cout << "Nos Acessados: " << contador << endl;
+    cout << endl << "-----------------" << endl << endl;
     if (resultado != NULL)
         return resultado->elemento;
     else{
@@ -218,6 +237,7 @@ dado avl::busca(dado chave) {
 // nó mínimo (sucessor) de subárvore com raiz em raizSub (folha mais à esquerda)
 noh* avl::encontraMenor(noh* raizSub) {
     if (raizSub->esq != NULL){
+        contador++;
         raizSub = encontraMenor(raizSub->esq);
     }
     return raizSub;
@@ -229,6 +249,7 @@ noh* avl::removeMenor(noh* raizSub) {
     if(raizSub->esq == NULL){
         return raizSub->dir;
     }else{
+        contador++;
         raizSub->esq = removeMenor(raizSub->esq);
         return arrumaBalanceamento(raizSub);
     }
@@ -236,7 +257,10 @@ noh* avl::removeMenor(noh* raizSub) {
 
 // remoção recursiva
 void avl::remove(dado chave) {
+    contador = 0;
     raiz = removeAux(raiz, chave);
+    cout << "Nos Acessados: " << contador << endl;
+    cout << endl << "-----------------" << endl << endl;
 }
 
 noh* avl::removeAux(noh* umNoh, dado chave) {
@@ -248,17 +272,22 @@ noh* avl::removeAux(noh* umNoh, dado chave) {
 
     if(chave < umNoh->elemento){
         umNoh->esq = removeAux(umNoh->esq, chave);
+        contador++;
     }else if(chave > umNoh->elemento){
         umNoh->dir = removeAux(umNoh->dir, chave);
+        contador++;
     }else{
         if(umNoh->esq == NULL){
             novaRaiz = umNoh->dir;
+            contador++;
         }else if(umNoh->dir == NULL){
             novaRaiz = umNoh->esq;
+            contador++;
         }else{
             novaRaiz = encontraMenor(umNoh->dir);
             novaRaiz->dir = removeMenor(umNoh->dir);
             novaRaiz->esq = umNoh->esq;
+            contador ++;
         }
         delete umNoh;
     }
@@ -321,18 +350,25 @@ int main() {
 
     //insere 30 objetos
     for (unsigned i = 0; i < 30; ++i) {
+        cout << "Insercao de: "; 
         cin >> valor;
         arvore.insere(valor);
     }
 
+    cout << endl << "##################################################################" << endl << endl;
+
     //remove 20 objetos
     for (unsigned i = 0; i < 20; ++i) {
+        cout << "Remocao de: ";
         cin >> valor;
         arvore.remove(valor);
     }
+    
+    cout << endl << "##################################################################" << endl << endl;
 
     //busca 30 objetos
     for (unsigned i = 0; i < 30; ++i) {
+        cout << "Busca de: ";
         cin >> valor;
         arvore.busca(valor);
     }
