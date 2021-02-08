@@ -28,10 +28,6 @@ Noh::Noh(Dado d) {
     pai = NULL;
 }
 
-/*unsigned Noh::NroDeFolhas() const {
-    // implemente
-}*/
-
 class ABB {
     public:
         ABB();
@@ -113,37 +109,9 @@ void ABB::Inserir(Dado d) {
             anterior->dir = novoNoh;
         }
     }
-    //cout << "Insercao de " << d << " " << "-----------";
     cout << "Nos Acessados: " << contador << endl;
     cout << endl << "-----------------" << endl << endl;
 }
-
-/*void ABB::percorre(Noh* atual){
-    int contador = 0;
-    if(atual != NULL){
-        percorre(atual->dir);
-        cout << atual->valor << endl;
-        percorre(atual->esq);
-    }else{
-        contador++;
-        cout << "CONT" << contador << endl;
-    }
-}*/
-
-/*unsigned ABB::NroDeFolhas(){
-    return NroDeFolhasAux(raiz);
-}
-
-unsigned ABB::NroDeFolhasAux(Noh* atual){
-    if(atual == NULL){
-        return 0;
-    }
-    if((atual->esq == NULL) and (atual->dir == NULL)){
-        return 1;
-    }else{
-        return (NroDeFolhasAux(atual->esq)) + (NroDeFolhasAux(atual->dir));
-    }
-}*/
 
 void ABB::EscreverNivelANivel(ostream& saida) {
     queue<Noh*> filhos;
@@ -218,6 +186,9 @@ void ABB::remove(Dado d){
     if(remover == NULL){
         cout << "ERRO" << endl;
     } else {
+        if((remover->esq == NULL) and (remover->dir == NULL)){
+            contador--;
+        }
         if(remover -> esq == NULL){
             transplanta(remover, remover -> dir);
             contador++;
@@ -255,14 +226,13 @@ void ABB::transplanta(Noh* antigo, Noh* novo){
     if(novo != NULL){
         novo->pai = antigo->pai;
     }
-    //contador++;
 } 
 
 Noh* ABB::minimoAux(Noh* atual){
     //Retorna o minimo da arvore
     while(atual -> esq != NULL){
+        contador++;
         atual = atual -> esq;
-        //contador++;
     }
     return atual;
 }
