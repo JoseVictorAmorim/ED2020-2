@@ -182,7 +182,7 @@ noh* avl::rotacaoEsquerda(noh* umNoh) {
     aux->esq = umNoh;
     atualizaAltura(umNoh);
     atualizaAltura(aux);
-    contador ++;
+    contador += 2;
 
     return aux;
 }
@@ -196,7 +196,7 @@ noh* avl::rotacaoDireita(noh* umNoh) {
    
     atualizaAltura(umNoh);
     atualizaAltura(aux);
-    contador ++;
+    contador += 2;
 
 
     return aux;
@@ -279,11 +279,24 @@ noh* avl::removeAux(noh* umNoh, dado chave) {
     }else{
         if(umNoh->esq == NULL){
             novaRaiz = umNoh->dir;
-            contador++;
+            contador ++;
+            if(novaRaiz != NULL){
+                if((novaRaiz->esq == NULL) and (novaRaiz->dir == NULL)){
+                    contador++;
+                }
+            }
         }else if(umNoh->dir == NULL){
             novaRaiz = umNoh->esq;
-            contador++;
+            contador ++;
+            if(novaRaiz != NULL){
+                if((novaRaiz->esq == NULL) and (novaRaiz->dir == NULL)){
+                    contador++;
+                }
+            }
         }else{
+            if((umNoh->dir->esq == NULL) and (umNoh->dir->dir == NULL)){
+                contador++;
+            }
             novaRaiz = encontraMenor(umNoh->dir);
             novaRaiz->dir = removeMenor(umNoh->dir);
             novaRaiz->esq = umNoh->esq;
@@ -292,56 +305,6 @@ noh* avl::removeAux(noh* umNoh, dado chave) {
         delete umNoh;
     }
     return arrumaBalanceamento(novaRaiz);
-}
-
-// imprime formatado seguindo o padrao tree as subarvores direitas de uma avl
-void avl::imprimirDir(const std::string& prefixo, const noh* meuNoh)
-{
-    if( meuNoh != nullptr )
-    {
-        std::cout << prefixo
-                  << "└d─"
-                  << "(" << meuNoh->elemento << ")"  << endl;
-
-        // Repassa o prefixo para manter o historico de como deve ser a formatacao e chama no filho direito e esquerdo
-        imprimirEsq( prefixo + "    " , meuNoh->esq , meuNoh->dir==nullptr );
-        imprimirDir( prefixo + "    " , meuNoh->dir );
-    }
-}
-
-// imprime formatado seguindo o padrao tree as subarvores direitas de uma avl
-void avl::imprimirEsq(const std::string& prefixo, const noh* meuNoh, bool temIrmao)
-{
-    if( meuNoh != nullptr )
-    {
-        std::cout << prefixo ;
-
-        // A impressao da arvore esquerda depende da indicacao se existe o irmao a direita
-        if (temIrmao)
-            std::cout << "└e─" ;
-        else
-            std::cout << "├e─";
-
-        std::cout << "(" << meuNoh->elemento << ")" << endl;
-
-        // Repassa o prefixo para manter o historico de como deve ser a formatacao e chama no filho direito e esquerdo
-        imprimirEsq( prefixo + "│   " , meuNoh->esq, meuNoh->dir==nullptr );
-        imprimirDir( prefixo + "│   " , meuNoh->dir );
-    }
-}
-
-// imprime formatado seguindo o padrao tree uma avl
-void avl::imprimir()
-{
-    if( this->raiz != nullptr )
-    {
-        std::cout << "(" << this->raiz->elemento << ")" << std::endl;
-        // apos imprimir a raiz, chama os respectivos metodos de impressao nas subarvore esquerda e direita
-        // a chamada para a impressao da subarvore esquerda depende da existencia da subarvore direita
-        imprimirEsq( " " , this->raiz->esq, this->raiz->dir==nullptr );
-        imprimirDir( " " , this->raiz->dir );
-    } else
-        std::cout << "*arvore vazia*" << std::endl;
 }
 
 int main() {
