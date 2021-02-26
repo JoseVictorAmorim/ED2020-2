@@ -44,5 +44,6 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "python.pythonPath": "C:\\Users\\José Victor\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
 }
